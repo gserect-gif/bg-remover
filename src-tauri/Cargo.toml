@@ -19,8 +19,12 @@ serde_json = "1"
 # "download-binaries" pulls the matching prebuilt onnxruntime.dll at build
 # time so there's no separate DLL install step for the end user.
 # "tls-native" is required alongside download-binaries (it fetches over HTTPS).
-ort = { version = "2.0.0-rc.10", default-features = false, features = ["ndarray", "download-binaries", "tls-native", "std"] }
-ndarray = "0.16"
+ort = { version = "2.0.0-rc.13", default-features = false, features = ["ndarray", "download-binaries", "tls-native", "std"] }
+# No explicit version pin: must resolve to exactly the same ndarray build
+# that ort's own "ndarray" feature pulls in, or the compiler treats them
+# as distinct types (E0277 trait-not-satisfied). Cargo will unify this
+# automatically as long as we don't force a conflicting version here.
+ndarray = "*"
 
 # Image decode/encode: PNG, JPEG, WebP
 image = { version = "0.25", features = ["png", "jpeg", "webp"] }

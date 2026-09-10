@@ -73,7 +73,7 @@ impl InferenceEngine {
 
         let input_name = self
             .session
-            .inputs
+            .inputs()
             .first()
             .map(|i| i.name.clone())
             .ok_or_else(|| AppError::InferenceFailure("model has no inputs".into()))?;
@@ -85,7 +85,7 @@ impl InferenceEngine {
 
         let output_name = self
             .session
-            .outputs
+            .outputs()
             .first()
             .map(|o| o.name.clone())
             .ok_or_else(|| AppError::InferenceFailure("model has no outputs".into()))?;
