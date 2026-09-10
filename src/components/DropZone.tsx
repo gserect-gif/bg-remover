@@ -1,12 +1,11 @@
 import { useState, useCallback, DragEvent } from "react";
 
 interface Props {
-  onFileChosen: (path: string) => void;
   onBrowse: () => void;
   errorMessage: string | null;
 }
 
-export function DropZone({ onFileChosen, onBrowse, errorMessage }: Props) {
+export function DropZone({ onBrowse, errorMessage }: Props) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = useCallback((e: DragEvent) => {

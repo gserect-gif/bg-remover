@@ -103,7 +103,7 @@ export default function App() {
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         {showDropZone ? (
-          <DropZone onFileChosen={runRemoval} onBrowse={handleBrowse} errorMessage={errorMessage} />
+          <DropZone onBrowse={handleBrowse} errorMessage={errorMessage} />
         ) : (
           <PreviewSurface phase={phase} previewPath={previewPath} errorMessage={errorMessage} />
         )}
