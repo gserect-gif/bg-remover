@@ -1,0 +1,69 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+
+      - name: Cache downloaded model
+        uses: actions/cache@v4
+        id: model-cache
+        with:
+          path: src-tauri/models/isnet-general-use.onnx
+          key: isnet-general-use-onnx-v1
+
+      - name: Fetch AI model
+        if: steps.model-cache.outputs.cache-hit != 'true'
+        run: ./scripts/fetch-model.ps1
+        shell: pwsh
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      - name: Build Windows app
+        run: npx tauri build
+        shell: pwsh
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-Remover-Windows-Installer
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+          if-no-files-found: error
+
+      - name: Upload raw exe artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-Remover-Windows-Raw-Exe
+          path: |
+            src-tauri/target/release/bg-remover.exe
+          if-no-files-found: error

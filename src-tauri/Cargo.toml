@@ -1,0 +1,44 @@
+[package]
+name = "bg-remover"
+version = "1.0.0"
+description = "Local AI background removal for Windows"
+authors = ["you"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# ONNX Runtime bindings — CPU execution provider, no CUDA required.
+# "download-binaries" pulls the matching prebuilt onnxruntime.dll at build
+# time so there's no separate DLL install step for the end user.
+# "tls-native" is required alongside download-binaries (it fetches over HTTPS).
+ort = { version = "2.0.0-rc.10", default-features = false, features = ["ndarray", "download-binaries", "tls-native", "std"] }
+ndarray = "0.16"
+
+# Image decode/encode: PNG, JPEG, WebP
+image = { version = "0.25", features = ["png", "jpeg", "webp"] }
+
+# Fast, high-quality resizing (Lanczos3) for pre/post processing
+fast_image_resize = "5"
+
+once_cell = "1"
+anyhow = "1"
+thiserror = "2"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[[bin]]
+name = "bg-remover"
+path = "src/main.rs"

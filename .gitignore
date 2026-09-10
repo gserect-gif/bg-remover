@@ -1,0 +1,20 @@
+# Node
+node_modules/
+dist/
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# The model is large (~178MB) — fetched via scripts/fetch-model.ps1 or
+# scripts/fetch-model.sh, or committed via Git LFS. Not tracked directly
+# unless you set up LFS (see README).
+# src-tauri/models/*.onnx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
